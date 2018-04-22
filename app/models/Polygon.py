@@ -12,3 +12,5 @@ class Polygon(db.Model):
     @property
     def serialize(self):
        return [c.serialize for c in self.coordinates]
+
+        

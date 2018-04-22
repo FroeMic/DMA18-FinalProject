@@ -7,7 +7,7 @@ app = Flask(__name__)
 app.config.from_object('config')
 db = SQLAlchemy(app)
 
-from app import routes, models, utils
+from app import routes, models, utils, seed
 
 def create_database(hard=False):
     ''' Creates the database schema specified by the SQLAlchemy models '''
@@ -30,6 +30,9 @@ def drop_database():
     db.drop_all()
     print('Done!')
 
+def seed_database():
+    seed.seed_database()
+    
 
 # AUTO SETUP
 def _bootstrap_app_if_neccessary():
