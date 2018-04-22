@@ -15,8 +15,14 @@ def create_database(hard=False):
         drop_database()
 
     print('Creating database schema ... ')
-    db.create_all()
-    print('Done!')
+    try:
+        db.create_all()
+        print('Done!')
+    except Exception as e:
+        print('Error! Failed to create database!')
+        print('Cleaning up ...')
+        os.remove(_get_db_path())
+        raise e
 
 def drop_database():
     ''' Drops the current database schema '''
