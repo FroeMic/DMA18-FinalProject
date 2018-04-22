@@ -20,7 +20,7 @@ class CensusTract(db.Model):
     @property
     def serialize(self):
        return {
-           'type': 'state',
+           'type': 'census',
            'state': self.state.state,
            'state_code': self.state.state_code,
            'county': self.county.county,

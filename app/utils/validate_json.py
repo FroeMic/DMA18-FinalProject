@@ -19,21 +19,21 @@ def validate_json(json):
                 'message': 'state_code is required.'
             })   
 
-    if detail_level and detail_level in ['county', 'census']:
-        county_code = json.get('county_code')
-        if county_code is None:
-            errors.append({
-                'field': 'county_code',
-                'message': 'county_code is required for detail_level in [\'county\', \'census\']'
-            })     
+    # if detail_level and detail_level in ['county', 'census']:
+    #     county_code = json.get('county_code')
+    #     if county_code is None:
+    #         errors.append({
+    #             'field': 'county_code',
+    #             'message': 'county_code is required for detail_level in [\'county\', \'census\']'
+    #         })     
 
-    if detail_level and detail_level in ['census']:
-        census_tract_number = json.get('census_tract_number')
-        if census_tract_number is None:
-            errors.append({
-                'field': 'census_tract_number',
-                'message': 'census_tract_number is required for detail_level in [\'census\']'
-            })     
+    # if detail_level and detail_level in ['census']:
+    #     census_tract_number = json.get('census_tract_number')
+    #     if census_tract_number is None:
+    #         errors.append({
+    #             'field': 'census_tract_number',
+    #             'message': 'census_tract_number is required for detail_level in [\'census\']'
+    #         })     
 
     map_type = json.get('map_type')
     if map_type is None or map_type not in ['average', 'predicted', 'deviation']:
