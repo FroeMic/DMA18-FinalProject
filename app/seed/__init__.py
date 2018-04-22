@@ -15,4 +15,5 @@ def seed_database():
         
     json_data = json.loads(seed_file)
 
+    # !Create a new State object
     print(json_data['state'])

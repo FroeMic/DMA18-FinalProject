@@ -3,7 +3,7 @@ from app import db
 class State(db.Model):
     '''A US State.'''
     
-    def __init__(self, state, state_code,  geojson):
+    def __init__(self, state, state_code, geojson):
         self.state = state_code
         self.state_code = state_code
         self.geojson = geojson
