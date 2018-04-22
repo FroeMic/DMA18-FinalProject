@@ -2,9 +2,9 @@ from app import db
 
 class State(db.Model):
     '''A US State.'''
-    
-    def __init__(self, state, state_code,  geojson):
-        self.state = state_code
+
+    def __init__(self, state, state_code, geojson):
+        self.state = state
         self.state_code = state_code
         self.geojson = geojson
 

@@ -31,8 +31,9 @@ def drop_database():
     print('Done!')
 
 def seed_database():
+    create_database(hard=True)
     seed.seed_database()
-    
+
 
 # AUTO SETUP
 def _bootstrap_app_if_neccessary():
