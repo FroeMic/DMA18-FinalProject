@@ -9,4 +9,10 @@ class Polygon(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     type = db.Column(db.String(128), index=False, nullable=False)
-    coordinates = db.relationship('Coordinate', backref='polygon', lazy=False)
+
+    @property
+    def serialize(self):
+       return {
+           'type': self.type,
+           'coordinates': [c.serialize for c in self.coordinates]
+       }

@@ -15,3 +15,17 @@ class State(db.Model):
 
     geojson = db.relationship('GeoJsonFeature', uselist=False, backref='state', lazy=False)
     counties = db.relationship('County', backref='state', lazy=True)
+
+
+    @property
+    def serialize(self):
+       return {
+           'type': 'state',
+           'state': self.state,
+           'state_code': self.state_code,
+           'county': None,
+           'county_code': None,
+           'census_tract': None,
+           'census_tract_number': None,
+           'geojson': self.geojson.serialize if self.geojson is not None else None
+       }

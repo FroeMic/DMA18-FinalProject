@@ -17,3 +17,15 @@ class CensusTract(db.Model):
 
     geojson = db.relationship('GeoJsonFeature', uselist=False, backref='census_tract', lazy=False)
  
+    @property
+    def serialize(self):
+       return {
+           'type': 'state',
+           'state': self.state.state,
+           'state_code': self.state.state_code,
+           'county': self.county.county,
+           'county_code': self.county.county_code,
+           'census_tract': self.census_tract,
+           'census_tract_number': self.census_tract_number,
+           'geojson': self.geojson.serialize if self.geojson is not None else None
+       }
