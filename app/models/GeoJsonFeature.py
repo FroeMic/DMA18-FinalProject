@@ -9,11 +9,14 @@ class GeoJsonFeature(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     type = db.Column(db.String(128), index=False, nullable=False)
 
-    geometry = db.relationship('Polygon', backref='feature', lazy=False)
+    polygons = db.relationship('Polygon', backref='feature', lazy=False)
 
     @property
     def serialize(self):
        return {
            'type': self.type,
-           'coordinates': self.geometry.serialize
+           'geometry': {
+               'type': 'Polygon',
+               'coordinates': [polygon.serialize for polygon in self.polygons]
+           }
        }
