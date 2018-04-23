@@ -82,13 +82,23 @@ def create_geojsonfeature(json_geojson):
     }
     '''
     #print('json_geojson', json_geojson)
-    coordinates_lists = json_geojson['geometry']['coordinates']
-    coordinates_lists = coordinates_lists if coordinates_lists is not None else []
-    polygons = []
-    for coordinates_list in coordinates_lists:
-        polygons.append(create_polygon(coordinates_list))
+    polygon_lists = []
+    geometry_type = json_geojson['geometry']['type']
 
-    geojsonfeature = GeoJsonFeature(polygons)
+    if geometry_type == 'MultiPolygon':
+        polygon_lists = json_geojson['geometry']['coordinates']
+        polygon_lists = polygon_lists if polygon_lists is not None else []
+    elif geometry_type == 'MultiPolygon':
+        polygon_lists =  [ json_geojson['geometry']['coordinates'] ]
+    
+    polygons = []
+    for coordinates_lists in polygon_lists:
+        coordinates_lists = coordinates_lists if coordinates_lists is not None else []
+
+        for coordinates_list in coordinates_lists:
+            polygons.append(create_polygon(coordinates_list))
+
+    geojsonfeature = GeoJsonFeature(geometry_type, polygons)
     db.session.add(geojsonfeature)
     db.session.commit()
     return geojsonfeature
@@ -114,10 +124,12 @@ def create_polygon(json_polygon):
 def create_coordinate(json_coordinate):
     ''' json_coordinates is e.g. [2134324.323, 2121.4343]'''
     #print('json_coordinate', json_coordinate)
+    if type(json_coordinate[0]) is list:
+        print (json_coordinate)
     lng = json_coordinate[0]
     lat = json_coordinate[1]
-    lng = type(lng) is list if lng[0] else lng
-    lat = type(lat) is list if lat[0] else lat
+    lng = lng[0] if type(lng) is list else lng
+    lat = lat[0] if type(lat) is list else lat
     coordinate = Coordinate(json_coordinate[0], json_coordinate[1])
     db.session.add(coordinate)
     db.session.commit()

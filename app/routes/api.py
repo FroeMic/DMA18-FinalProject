@@ -5,8 +5,15 @@ from app.utils import ListConverter, validate_json
 
 import random 
 
-# helpers
+# SETUP
 app.url_map.converters['list'] = ListConverter
+
+@app.after_request
+def after_request(response):
+  response.headers.add('Access-Control-Allow-Origin', '*')
+  response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+  response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
+  return response
 
 def build_response(data, success = True, status = 200, errors = []):
     return jsonify(data = data, success = success, errors = errors), status
@@ -22,6 +29,7 @@ def version():
 
 @app.route('/api/v1/mapdata', methods=['POST'])
 def mapdata():
+    
     json = request.get_json()
 
     if json is None: 
