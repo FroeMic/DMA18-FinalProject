@@ -9,6 +9,8 @@ class Polygon(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     geojson_id = db.Column(db.Integer, db.ForeignKey('geo_json_feature.id'), nullable=True)
 
+    coordinates = db.relationship('Coordinate', backref='polygon', lazy=False)
+
     @property
     def serialize(self):
-       return [c.serialize for c in self.coordinates]
+       return [c.serialize for c in sorted(self.coordinates, key =lambda c: c.id) ]

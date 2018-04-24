@@ -16,12 +16,20 @@ class GeoJsonFeature(db.Model):
 
     @property
     def serialize(self):
-       return {
-           'type': self.type,
-           'geometry': {
-               'type': self.geometry_type,
-               'coordinates': [polygon.serialize for polygon in self.polygons]
-           }
-       }
-
+        if self.geometry_type == 'Polygon':
+            return {
+                'type': self.type,
+                'geometry': {
+                    'type': self.geometry_type,
+                    'coordinates': [polygon.serialize for polygon in sorted(self.polygons, key=lambda p: p.id)]
+                }
+            }
+        elif self.geometry_type == 'MultiPolygon':
+            return {
+                'type': self.type,
+                'geometry': {
+                    'type': self.geometry_type,
+                    'coordinates':[[polygon.serialize for polygon in sorted(self.polygons, key=lambda p: p.id)]]
+                }
+            }
 

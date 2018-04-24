@@ -16,7 +16,6 @@ def seed_database():
     seed_file = str(seed_file).strip('\n')
     seed_file = str(seed_file).strip(';')
     json_data = json.loads(seed_file)
-    #create_geojsonfeature(json_data['geojson'])
 
     create_state(json_data)
 
@@ -36,7 +35,6 @@ def create_counties(state, json_counties):
         create_county(state, countyDict)
 
 
-
 def create_county(state, countyDict):
     countyName = countyDict['county']
     countyCode = countyDict['county_code']
@@ -44,6 +42,7 @@ def create_county(state, countyDict):
     county = County(countyName, countyCode, state, countyGeojson)
     db.session.add(county)
     db.session.commit()
+
     create_censustracts(county, countyDict['census_tracts'])
 
 
@@ -88,7 +87,7 @@ def create_geojsonfeature(json_geojson):
     if geometry_type == 'MultiPolygon':
         polygon_lists = json_geojson['geometry']['coordinates']
         polygon_lists = polygon_lists if polygon_lists is not None else []
-    elif geometry_type == 'MultiPolygon':
+    elif geometry_type == 'Polygon':
         polygon_lists =  [ json_geojson['geometry']['coordinates'] ]
     
     polygons = []
@@ -124,13 +123,10 @@ def create_polygon(json_polygon):
 def create_coordinate(json_coordinate):
     ''' json_coordinates is e.g. [2134324.323, 2121.4343]'''
     #print('json_coordinate', json_coordinate)
-    if type(json_coordinate[0]) is list:
-        print (json_coordinate)
     lng = json_coordinate[0]
     lat = json_coordinate[1]
-    lng = lng[0] if type(lng) is list else lng
-    lat = lat[0] if type(lat) is list else lat
-    coordinate = Coordinate(json_coordinate[0], json_coordinate[1])
+
+    coordinate = Coordinate(lng, lat)
     db.session.add(coordinate)
     db.session.commit()
     return coordinate
