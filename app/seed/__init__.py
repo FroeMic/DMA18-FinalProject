@@ -4,9 +4,10 @@
 #sys.path.append('/Users/rohankapuria/Downloads/01Spring2018/DMA/FinalProject/DMA18-FinalProject-Server')
 import app
 from app import db
-from app.models import CensusTract, County, State, Coordinate, Polygon, GeoJsonFeature
+from app.models import CensusTract, County, State
 
 import json
+import simplejson
 
 def seed_database():
     ''' Seeds the database '''
@@ -62,74 +63,5 @@ def create_censustract(county, censusTract):
 
 
 def create_geojsonfeature(json_geojson):
-    '''
-      "geojson": {
-        "type": "Feature",
-        "geometry": {
-            "type": "Polygon",
-            "coordinates": [
-                [
-                    [
-                        -123.233256,
-                        42.006186
-                    ],
-                    ...
-                ],
-                ...
-            ]
-        }
-    }
-    '''
-    #print('json_geojson', json_geojson)
-    polygon_lists = []
-    geometry_type = json_geojson['geometry']['type']
-
-    if geometry_type == 'MultiPolygon':
-        polygon_lists = json_geojson['geometry']['coordinates']
-        polygon_lists = polygon_lists if polygon_lists is not None else []
-    elif geometry_type == 'Polygon':
-        polygon_lists =  [ json_geojson['geometry']['coordinates'] ]
-    
-    polygons = []
-    for coordinates_lists in polygon_lists:
-        coordinates_lists = coordinates_lists if coordinates_lists is not None else []
-
-        for coordinates_list in coordinates_lists:
-            polygons.append(create_polygon(coordinates_list))
-
-    geojsonfeature = GeoJsonFeature(geometry_type, polygons)
-    db.session.add(geojsonfeature)
-    db.session.commit()
-    return geojsonfeature
-
-
-def create_polygon(json_polygon):
-    ''' json_polygon is e.g.  [ [2134324.323, 2121.4343] ]'''
-    #print('json_polygon', json_polygon)
-    coordinates = []
-    for json_coordinate in json_polygon:
-        coordinates.append(create_coordinate(json_coordinate))
-
-    polygon = Polygon(coordinates)
-    db.session.add(polygon)
-    db.session.commit()
-
-    for coordinate in coordinates:
-        coordinate.polygon_id = polygon.id
-    db.session.commit()
-
-    return polygon
-
-def create_coordinate(json_coordinate):
-    ''' json_coordinates is e.g. [2134324.323, 2121.4343]'''
-    #print('json_coordinate', json_coordinate)
-    lng = json_coordinate[0]
-    lat = json_coordinate[1]
-
-    coordinate = Coordinate(lng, lat)
-    db.session.add(coordinate)
-    db.session.commit()
-    return coordinate
-
-
-# seed_database()
+    return simplejson.dumps(json_geojson, indent=4, sort_keys=False)
+ 

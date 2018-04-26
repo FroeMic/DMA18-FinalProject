@@ -1,4 +1,5 @@
 from app import db
+import json
 
 class CensusTract(db.Model):
     '''A county of an US State.'''
@@ -10,12 +11,11 @@ class CensusTract(db.Model):
         self.geojson = geojson
 
     id = db.Column(db.Integer, primary_key=True)
-    geojson_id = db.Column(db.Integer, db.ForeignKey('geo_json_feature.id'), nullable=True)
     county_id = db.Column(db.Integer, db.ForeignKey('county.id'), nullable=False)
     census_tract = db.Column(db.String(128), index=False, nullable=False, unique=False)
     census_tract_number = db.Column(db.String(128), index=False, nullable=False, unique=False)
-
-    geojson = db.relationship('GeoJsonFeature', uselist=False, backref='census_tract', lazy=False)
+    
+    geojson = db.Column(db.Text, nullable=False, unique=False)
 
     @property
     def serialize(self):
@@ -27,5 +27,5 @@ class CensusTract(db.Model):
            'county_code': self.county.county_code,
            'census_tract': self.census_tract,
            'census_tract_number': self.census_tract_number,
-           'geojson': self.geojson.serialize if self.geojson is not None else None
+           'geojson': json.loads(self.geojson)
        }

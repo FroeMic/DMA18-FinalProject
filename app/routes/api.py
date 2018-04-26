@@ -70,12 +70,12 @@ def mapdata():
         }
         return build_response(data)
     # serializing all 1k census tracts takes almost 1 minute. Not feasible for our prototype
-    # elif json['detail_level'] == 'census':
-    #     data = {
-    #         'detail_level': json.get('detail_level'),
-    #         'instances': [serialize_result(c) for c in CensusTract.query.all()]
-    #     }
-    #     return build_response(data)
+    elif json['detail_level'] == 'census':
+        data = {
+            'detail_level': json.get('detail_level'),
+            'instances': [serialize_result(c) for c in CensusTract.query.all()]
+        }
+        return build_response(data)
     else:
         return build_response(None, 
                     success = False, 
