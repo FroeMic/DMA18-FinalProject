@@ -23,8 +23,9 @@ def seed_database():
 def create_state(json_data):
     state = json_data['state']
     stateCode = json_data['state_code']
+    avgData = json_data['avg_loan']
     stateGeojson = create_geojsonfeature(json_data['geojson'])
-    state = State(state,stateCode,stateGeojson)
+    state = State(state,stateCode,stateGeojson,avgData)
     db.session.add(state)
     db.session.commit()
 
@@ -39,8 +40,9 @@ def create_counties(state, json_counties):
 def create_county(state, countyDict):
     countyName = countyDict['county']
     countyCode = countyDict['county_code']
+    avgData = countyDict['avg_loan']
     countyGeojson = create_geojsonfeature(countyDict['geojson'])
-    county = County(countyName, countyCode, state, countyGeojson)
+    county = County(countyName, countyCode, state, countyGeojson, avgData)
     db.session.add(county)
     db.session.commit()
 
@@ -55,8 +57,9 @@ def create_censustracts(county, censusTractList):
 def create_censustract(county, censusTract):
     censusTractName = censusTract['census_tract']
     censusTractNumber = censusTract['census_tract_number']
+    avgData = censusTract['avg_loan']
     censusTractGeojson = create_geojsonfeature(censusTract['geojson'])
-    censusTractObj = CensusTract(censusTractName, censusTractNumber, county, censusTractGeojson)
+    censusTractObj = CensusTract(censusTractName, censusTractNumber, county, censusTractGeojson, avgData)
 
     db.session.add(censusTractObj)
     db.session.commit()
