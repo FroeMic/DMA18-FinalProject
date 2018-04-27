@@ -26,7 +26,7 @@ class State(db.Model):
            'state_code': self.state_code,
            'county': None,
            'county_code': None,
-           'avg_loan': self.avg_loan,
+           'avg_loan': '{:02f}'.format(self.avg_loan * 1000),
            'census_tract': None,
            'census_tract_number': None,
            'geojson': json.loads(self.geojson)

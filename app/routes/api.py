@@ -27,11 +27,40 @@ def version():
     }
     return build_response(data)
 
+@app.route('/api/v1/revision')
+def revision():
+    detail_level = request.args.get('detail_level')
+    revision = None
+    if detail_level == 'state':
+        revision = 1
+    elif detail_level == 'county':
+        revision = 1
+    elif detail_level == 'census':
+        revision = 1
+
+    if revision is None:
+        return build_response(None, 
+                    success = False, 
+                    status = 400, 
+                    errors = [{
+                        'field': 'detail_level',
+                        'message': 'The url parameter \'detail_level\' must be set and withing [\'state\', \'county\', \'census\']' 
+                    }]
+            )   
+
+    data = {
+        'revision': revision
+    }
+
+    return build_response(data)   
+        
+
+    
+
 def serialize_result(serializable):
     dic = serializable.serialize
     dic['value'] = random.randint(10000,500000)
     return dic
-
 
 @app.route('/api/v1/mapdata', methods=['POST'])
 def mapdata():
@@ -60,12 +89,14 @@ def mapdata():
     if json['detail_level'] == 'state':
         data = {
             'detail_level': json.get('detail_level'),
+            'revision': 1,
             'instances': [serialize_result(c) for c in State.query.all()]
         }
         return build_response(data)
     elif json['detail_level'] == 'county':
         data = {
             'detail_level': json.get('detail_level'),
+            'revision': 1,
             'instances': [serialize_result(c) for c in County.query.all()]
         }
         return build_response(data)
@@ -73,6 +104,7 @@ def mapdata():
     elif json['detail_level'] == 'census':
         data = {
             'detail_level': json.get('detail_level'),
+            'revision': 1,
             'instances': [serialize_result(c) for c in CensusTract.query.all()]
         }
         return build_response(data)
