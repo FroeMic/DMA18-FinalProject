@@ -42,21 +42,6 @@ def validate_json(json):
             'message': 'map_type must be set and in [\'average\', \'predicted\', \'deviation\']'
         })
 
-    if map_type and map_type in ['predicted', 'deviation']:
-        loan_form = json.get('loan_form')
-        if loan_form is None:
-            errors.append({
-                'field': 'loan_form',
-                'message': 'loan_form is required for map_type in [\'predicted\', \'deviation\']'
-            })
-        else:
-            loan_success, loan_errors = validate_loan_json(loan_form)
-            errors + loan_errors
-
     return (len(errors) == 0, errors)
 
 
-def validate_loan_form_json(json):
-    errors = []
-
-    return (len(errors) == 0, errors)

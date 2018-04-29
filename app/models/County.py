@@ -23,6 +23,7 @@ class County(db.Model):
     @property
     def serialize(self):
        return {
+           '_id': self.generated_id,
            'type': 'county',
            'state': self.state.state,
            'state_code': self.state.state_code,
@@ -33,3 +34,17 @@ class County(db.Model):
            'census_tract_number': None,
            'geojson': json.loads(self.geojson)
        }
+
+    @property
+    def generated_id (self):
+        stateCode = int(self.state.state_code) if self.state.state_code else 0
+        countyCode = int(self.county_code) if self.county_code else 0
+        censusTractName =  0
+        censusTractNumber = 0.0
+
+        return '-'.join([
+            '{:02d}'.format(stateCode),
+            '{:03d}'.format(countyCode),
+            '{:06d}'.format(censusTractName),
+            '{:04.2f}'.format(censusTractNumber)
+        ])

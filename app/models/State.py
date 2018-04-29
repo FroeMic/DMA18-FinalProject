@@ -21,13 +21,28 @@ class State(db.Model):
     @property
     def serialize(self):
        return {
+           '_id': self.generated_id,
            'type': 'state',
            'state': self.state,
            'state_code': self.state_code,
            'county': None,
            'county_code': None,
-           'avg_loan': '{:02f}'.format(self.avg_loan * 1000),
+           'avg_loan': float('{:10.2f}'.format(self.avg_loan * 1000)),
            'census_tract': None,
            'census_tract_number': None,
            'geojson': json.loads(self.geojson)
        }
+
+    @property
+    def generated_id (self):
+        stateCode = int(self.state_code) if self.state_code else 0
+        countyCode = 0
+        censusTractName = 0
+        censusTractNumber = 0.0
+
+        return '-'.join([
+            '{:02d}'.format(stateCode),
+            '{:03d}'.format(countyCode),
+            '{:06d}'.format(censusTractName),
+            '{:04.2f}'.format(censusTractNumber)
+        ])
