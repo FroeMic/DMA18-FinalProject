@@ -11,6 +11,21 @@ import os
 # SETUP
 app.url_map.converters['list'] = ListConverter
 
+# =========================
+# Error Handlers 
+# =========================
+@app.errorhandler(Exception)
+def unhandled_exception(e):
+    print(e)
+    return build_response(None, 
+                success = False, 
+                status = 500, 
+                errors = [{
+                    'field': None,
+                    'message': 'he server encountered an internal error and was unable to complete your request.  Either the server is overloaded or there is an error in the application.'
+                }]
+        )  
+
 # Setup for model
 propery_type_mapping = {'Manufactured housing': 2, 'Multifamily dwelling': 3,
                        'One-to-four family dwelling (other than manufactured housing)': 4}
@@ -169,7 +184,6 @@ def predict_for_county(county, data):
 
     prediction = np.exp(loaded_model.predict(array)[0]) * 1000
     return (county.generated_id, prediction)
-    #return (county.generated_id, random.randint(10000,500000))
     
 def predict_for_census(census, data):
     return (census.generated_id, random.randint(10000,500000))
