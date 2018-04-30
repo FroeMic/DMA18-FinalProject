@@ -56,7 +56,7 @@ def revision():
 
 @app.route('/api/v1/mapdata', methods=['POST'])
 def mapdata():
-    
+
     json = request.get_json()
 
     if json is None: 
@@ -116,7 +116,6 @@ def predict_for_state(state, data):
     return (state.generated_id, random.randint(10000,500000))
     
 def predict_for_county(county, data):
-    
     return (county.generated_id, random.randint(10000,500000))
     
 def predict_for_census(census, data):
