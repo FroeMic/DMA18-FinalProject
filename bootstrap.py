@@ -1,3 +1,4 @@
-from app import seed_database
+from app import seed_database, create_database
 
+create_database()
 seed_database()
