@@ -222,6 +222,7 @@ def predict():
     elif json['detail_level'] == 'county':
         data = {}
         for county in County.query.all():
+            loan_form['hopeaStatus'] = 'Not a HOEPA loan'
             (_id, predicted_value) = predict_for_county(county, loan_form)
             data[_id] = predicted_value
         return build_response(data)
