@@ -155,9 +155,8 @@ def predict_for_state(state, data):
 def predict_for_county(county, data):
     array = np.full((1, 95), 0.0)
 
-    #array[0][0] = np.log(int(data['medianFamilyIncome']))
-    array[0][0] = random.uniform(10, 12)
-    array[0][1] = random.uniform(3, 7)
+    array[0][0] = np.log(int(data['medianFamilyIncome']))
+    array[0][1] = np.log(int(data['medianPersonalIncome']))
     array[0][propery_type_mapping[data['propertyTypeName']]] = 1
     array[0][preapproval_mapping[data['preApprovalName']]] = 1
     array[0][purpose_mapping[data['loanPurposeName']]] = 1
@@ -168,7 +167,7 @@ def predict_for_county(county, data):
     array[0][app_race[data['applicantRace']]] = 1
     array[0][county_map[county.county]] = 1
 
-    prediction = loaded_model.predict(array)[0] * 1000
+    prediction = np.exp(loaded_model.predict(array)[0]) * 1000
     return (county.generated_id, prediction)
     #return (county.generated_id, random.randint(10000,500000))
     
