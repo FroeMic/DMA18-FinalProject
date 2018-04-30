@@ -30,9 +30,10 @@ def drop_database():
     db.drop_all()
     print('Done!')
 
-def seed_database(hard=False):
-    create_database(hard=hard)
+def seed_database():
+    print('Seeding Database ...')
     seed.seed_database()
+    print('Done')
 
 
 # AUTO SETUP

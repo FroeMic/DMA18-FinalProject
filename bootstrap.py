@@ -1,3 +1,3 @@
-from app import _bootstrap_app_if_neccessary
+from app import seed_database
 
-_bootstrap_app_if_neccessary()
+seed_database()

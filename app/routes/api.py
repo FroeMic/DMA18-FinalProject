@@ -6,6 +6,24 @@ from app.utils import ListConverter, validate_json, validate_loan_form_json
 
 import random 
 
+def build_response(data, success = True, status = 200, errors = []):
+    return jsonify(data = data, success = success, errors = errors), status
+
+# =========================
+# Error Handlers 
+# =========================
+@app.errorhandler(Exception)
+def unhandled_exception(e):
+    print(e)
+    return build_response(None, 
+                success = False, 
+                status = 500, 
+                errors = [{
+                    'field': None,
+                    'message': 'he server encountered an internal error and was unable to complete your request.  Either the server is overloaded or there is an error in the application.'
+                }]
+        )  
+
 # SETUP
 app.url_map.converters['list'] = ListConverter
 
@@ -16,8 +34,6 @@ def after_request(response):
   response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
   return response
 
-def build_response(data, success = True, status = 200, errors = []):
-    return jsonify(data = data, success = success, errors = errors), status
 
 @app.route('/api/v1/version')
 def version():
