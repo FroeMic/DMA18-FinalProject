@@ -171,7 +171,7 @@ def predict_for_county(county, data):
     array = np.full((1, 95), 0.0)
 
     array[0][0] = np.log(int(data['medianFamilyIncome']))
-    array[0][1] = np.log(int(data['medianPersonalIncome']))
+    array[0][1] = np.log(int(data['medianPersonalIncome']) / 1000)
     array[0][propery_type_mapping[data['propertyTypeName']]] = 1
     array[0][preapproval_mapping[data['preApprovalName']]] = 1
     array[0][purpose_mapping[data['loanPurposeName']]] = 1
